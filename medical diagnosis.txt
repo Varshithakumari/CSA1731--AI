@@ -1,0 +1,24 @@
+% Facts representing symptoms and diseases
+symptom(john, fever).
+symptom(john, cough).
+symptom(john, headache).
+symptom(anna, fever).
+symptom(anna, sore_throat).
+symptom(anna, runny_nose).
+symptom(peter, cough).
+symptom(peter, runny_nose).
+
+disease(flu, [fever, cough, headache]).
+disease(cold, [fever, sore_throat, runny_nose]).
+
+% Rules to diagnose diseases based on symptoms
+diagnose(Person, Disease) :-
+    findall(Symptom, symptom(Person, Symptom), Symptoms),
+    disease(Disease, DiseaseSymptoms),
+    subset(DiseaseSymptoms, Symptoms).
+
+% Helper predicate to check if a list is a subset of another list
+subset([], _).
+subset([X|Xs], Set) :-
+    member(X, Set),
+    subset(Xs, Set).

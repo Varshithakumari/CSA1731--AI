@@ -1,0 +1,28 @@
+% Facts representing diseases and their associated dietary recommendations
+diet_suggestion(diabetes, [
+    avoid(sugar),
+    limit(carbohydrates),
+    eat(vegetables),
+    eat(proteins),
+    eat(healthy_fats)
+]).
+
+diet_suggestion(hypertension, [
+    limit(sodium),
+    eat(potassium-rich foods),
+    eat(magnesium-rich foods),
+    eat(fruits),
+    eat(whole grains)
+]).
+
+% Rules to suggest a diet based on disease
+suggest_diet(Disease) :-
+    diet_suggestion(Disease, Suggestions),
+    write('For '), write(Disease), write(', consider the following dietary suggestions:'), nl,
+    print_suggestions(Suggestions).
+
+% Helper predicate to print dietary suggestions
+print_suggestions([]).
+print_suggestions([H|T]) :-
+    write('- '), write(H), nl,
+    print_suggestions(T).

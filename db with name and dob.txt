@@ -1,0 +1,16 @@
+% Facts representing individuals with their name and date of birth
+person(john, date(1990, 5, 15)).
+person(sarah, date(1985, 10, 25)).
+person(michael, date(1995, 3, 8)).
+person(emily, date(1992, 8, 12)).
+
+% Rules to query information about individuals
+name_dob(Name, DOB) :-
+    person(Name, date(Year, Month, Day)),
+    DOB = date(Year, Month, Day).
+
+% Example queries
+% Query to find the date of birth of a specific person
+% Example: What is the date of birth of John?
+% Query: dob(john, DOB).
+% Response: DOB = date(1990, 5, 15).

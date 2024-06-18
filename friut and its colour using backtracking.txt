@@ -1,0 +1,18 @@
+% Facts about fruits and their colors
+fruit_color(apple, red).
+fruit_color(banana, yellow).
+fruit_color(grape, green).
+fruit_color(grape, purple).
+fruit_color(orange, orange).
+fruit_color(strawberry, red).
+
+% Query to find a fruit and its color
+fruit_color(Fruit, Color) :-
+    fruit_color(Fruit, Color).
+
+% Example query:
+% Query: What fruits are red?
+% Query: fruit_color(Fruit, red).
+
+% Query: What color is a banana?
+% Query: fruit_color(banana, Color).

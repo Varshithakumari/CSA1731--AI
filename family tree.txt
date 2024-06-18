@@ -1,0 +1,44 @@
+% Facts representing relationships in the family tree
+% Format: parent(Parent, Child)
+parent(john, bob).
+parent(john, alice).
+parent(alice, claire).
+parent(alice, david).
+parent(bob, emily).
+parent(bob, george).
+
+% Rules to define other relationships based on parent-child
+% Format: sibling(Sibling1, Sibling2)
+sibling(X, Y) :-
+    parent(P, X),
+    parent(P, Y),
+    X \= Y.
+
+% Format: grandfather(Grandfather, Grandchild)
+grandfather(G, C) :-
+    parent(G, P),
+    parent(P, C),
+    male(G).
+
+% Format: grandmother(Grandmother, Grandchild)
+grandmother(G, C) :-
+    parent(G, P),
+    parent(P, C),
+    female(G).
+
+% Facts representing genders
+% Format: gender(Person, Gender)
+gender(john, male).
+gender(bob, male).
+gender(alice, female).
+gender(claire, female).
+gender(david, male).
+gender(emily, female).
+gender(george, male).
+
+% Helper predicates to define genders
+male(X) :-
+    gender(X, male).
+
+female(X) :-
+    gender(X, female).

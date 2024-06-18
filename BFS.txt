@@ -1,0 +1,61 @@
+% Graph representation
+edge(a, b, 4).
+edge(a, c, 2).
+edge(b, d, 5).
+edge(b, e, 10).
+edge(c, f, 3).
+edge(d, g, 7).
+edge(e, g, 8).
+edge(f, g, 6).
+
+% Heuristic values (for Best-First Search, typically these are estimated distances to the goal)
+heuristic(a, 5).
+heuristic(b, 4).
+heuristic(c, 3).
+heuristic(d, 2).
+heuristic(e, 4).
+heuristic(f, 2).
+heuristic(g, 0).
+
+% Best-First Search predicate
+best_first_search(Start, Goal, Path) :-
+    % Initialize priority queue with initial node and heuristic value
+    best_first_search([[(Start, 0)]], Goal, Path).
+
+% Base case: goal state reached
+best_first_search([[(_, Cost)|Path]|_], Goal, [Goal|Path]) :-
+    reverse([Goal|Path], Path),
+    heuristic(Goal, H),
+    Cost + H =< 0.
+
+% Recursive case: expand current node and continue search
+best_first_search([Path|Paths], Goal, FinalPath) :-
+    expand(Path, NextPaths),
+    append(Paths, NextPaths, AllPaths),
+    sort_paths(AllPaths, SortedPaths),
+    best_first_search(SortedPaths, Goal, FinalPath).
+
+% Predicate to expand current path to neighboring nodes
+expand([(Node, Cost)|Path], NextPaths) :-
+    findall([(NextNode, NextCost), (Node, Cost)|Path],
+            (edge(Node, NextNode, StepCost),
+             \+ member((NextNode, _), Path),  % avoid cycles
+             NextCost is Cost + StepCost),
+            NextPaths).
+
+% Predicate to sort paths based on heuristic value
+sort_paths(Paths, SortedPaths) :-
+    predsort(compare_paths, Paths, SortedPaths).
+
+% Predicate to compare paths based on heuristic value
+compare_paths(Order, Path1, Path2) :-
+    estimated_cost(Path1, Cost1),
+    estimated_cost(Path2, Cost2),
+    (   Cost1 =< Cost2 -> Order = '<'
+    ;   Order = '>'
+    ).
+
+% Predicate to calculate estimated cost of a path (cost + heuristic)
+estimated_cost([(Node, Cost)|_], TotalCost) :-
+    heuristic(Node, H),
+    TotalCost is Cost + H.

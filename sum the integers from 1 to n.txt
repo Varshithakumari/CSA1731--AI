@@ -1,0 +1,6 @@
+sum_up_to(1, 1).
+sum_up_to(N, Sum) :-
+    N > 1,
+    Prev is N - 1,
+    sum_up_to(Prev, PrevSum),
+    Sum is PrevSum + N.

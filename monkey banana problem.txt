@@ -1,0 +1,32 @@
+% Initial state: monkey starts at floor, bananas are hanging, no boxes are available
+initial(state(at_floor, on_floor, at_ceiling, has_not)).
+
+% Goal state: monkey has the bananas
+goal(state(_, _, _, has)).
+
+% Actions that can be performed:
+% climb: climb onto a box
+% push: push a box to the ceiling
+% grasp: grab the bananas
+action(climb, state(at_floor, on_floor, at_ceiling, has_not), state(at_floor, on_box, at_ceiling, has_not)).
+action(push, state(at_floor, on_floor, at_ceiling, has_not), state(at_floor, on_floor, at_ceiling, has_box)).
+action(grasp, state(at_floor, on_box, at_ceiling, has_not), state(at_floor, on_box, at_ceiling, has)).
+
+% Rules to handle illegal moves
+% Monkey can't grasp without standing on the box
+% Monkey can't climb or push when already grasping the bananas
+illegal(state(_, on_floor, _, has_not), grasp).
+illegal(state(_, _, _, has), climb).
+illegal(state(_, _, _, has), push).
+
+% Depth-first search implementation
+solve(State, []) :- goal(State).
+solve(State, [Action|Rest]) :-
+    action(Action, State, NextState),
+    \+ illegal(NextState, Action),
+    solve(NextState, Rest).
+
+% Predicate to initiate solving the problem
+solve_problem(Plan) :-
+    initial(InitialState),
+    solve(InitialState, Plan).
